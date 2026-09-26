@@ -1,0 +1,12 @@
+{
+  "record":{"id":"deal-demo-1","stage":"new","owner":null},
+  "initial_event":"deal_created",
+  "rules":[
+    {"id":"assign-new","event":"deal_created","when":{"stage":"new"},"action":"assign_owner","value":""},
+    {"id":"advance","event":"deal_created","when":{"stage":"new"},"action":"set_stage","value":"qualified"},
+    {"id":"followup-a","event":"stage_changed","when":{"stage":"qualified"},"action":"queue_followup","value":"day-2"},
+    {"id":"followup-b","event":"stage_changed","when":{"stage":"qualified"},"action":"queue_followup","value":"day-2"},
+    {"id":"toggle-back","event":"stage_changed","when":{"stage":"qualified"},"action":"set_stage","value":"new"},
+    {"id":"toggle-forward","event":"stage_changed","when":{"stage":"new"},"action":"set_stage","value":"qualified"}
+  ]
+}
