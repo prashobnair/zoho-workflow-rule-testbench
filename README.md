@@ -1,26 +1,33 @@
-# Zoho Workflow Rule Testbench
+# zoho-workflow-rule-testbench (moved)
 
-An offline rules lab for a fictional CRM deal. It traces pipeline changes, assignment and follow-up queue decisions before someone configures a real CRM. It flags cycles, duplicate follow-ups and missing owners. No Deluge code is executed and no Zoho tenant, email or task list is touched.
+This project moved to [zoho-implementation-toolkit](https://github.com/prashobnair/zoho-implementation-toolkit) as the `workflow` module. Its full commit history was preserved there.
 
-## Contract use-case
+It simulates workflow rules against a record before anyone configures the real CRM — decisions traced, cycles and missing owners flagged.
 
-A [CRM automation brief](https://www.upwork.com/freelance-jobs/apply/CRM-Automation-Specialist-Zapier-Make-HubSpot-Zoho-Real-Workflow-Builds_~022038133362948951578/) asks for stages, cleanup, follow-ups and form/email/CRM connections. A [Zoho customization brief](https://www.freelancer.com/projects/crm/zoho-crm-customization-integration-39548378) includes modules and workflow rules. This repo shows a test-first *design exercise* for a subset of that work. Neither brief is this project's client.
-
-## Run
-
-Python 3.10+ and standard library only. From the repository root:
+## Use it now
 
 ```sh
-python3 cli.py examples.json
-python3 -m unittest discover -p 'test_*.py' -v
+pip install https://github.com/prashobnair/zoho-implementation-toolkit/releases/download/v0.1.0/zohokit-0.1.0-py3-none-any.whl
 ```
 
-No Zoho trial or credentials needed. The fixture is entirely fictional and deliberately broken. Expected finding codes: `missing_owner`, `duplicate_followup`, `cycle_detected`; `external_actions` remains zero. `DESIGN.md` includes a clean-rule example and a deployment checklist.
+or
 
-## Rule contract
+```sh
+uv tool install git+https://github.com/prashobnair/zoho-implementation-toolkit@v0.1.0
+```
 
-A rule has unique `id`, trigger `event` (`deal_created`, `stage_changed`, `followup_due`), optional exact-match `when`, and an `action`: `assign_owner`, `set_stage`, or `queue_followup`. A value is the owner ID, stage label or reminder label respectively. The interpreter queues an internal `stage_changed` event after a real stage transition and records each matched rule in a trace. It detects a repeated event plus record state as a cycle. A bounded step limit prevents runaway execution. Duplicate follow-up labels for a deal are reported, not silently scheduled twice.
+The old `python cli.py rules.json` is now:
 
-## Boundaries and risk
+```sh
+zohokit workflow simulate rules.json [--strict]
+```
 
-This is a **fictional intermediate rules language**, not Zoho Deluge syntax, workflow behavior or API semantics. It is intentionally narrower than a production engine: no priorities, asynchronous execution, role permissions, delayed schedules, idempotent persistence, real notifications or safe deployment. A clean trace is not permission to activate a rule in a tenant. See `DESIGN.md` for review, tests and rollout checks. Use only synthetic records in this repository.
+`--strict` exits 2 when the rules are not ready. Reports render with `--format json|table|markdown|html` and `--out`.
+
+## Links
+
+- Module guide: https://prashobnair.github.io/zoho-implementation-toolkit/modules/workflow/
+- What changed versus this repo: https://prashobnair.github.io/zoho-implementation-toolkit/legacy-parity/
+- Source: https://github.com/prashobnair/zoho-implementation-toolkit/tree/main/src/zohokit/modules/workflow
+
+This repository is archived and read-only.
